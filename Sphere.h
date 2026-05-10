@@ -1,8 +1,10 @@
-#ifndef VECTOR_SPHARE_H
-#define VECTOR_SPHARE_H
+#ifndef VECTOR_SPERE_H
+#define VECTOR_SPERE_H
 
 #include "Vector.h"
 #include "Ray.h"
+#include <iosfwd>
+
 class Sphere {
 public:
     Sphere();
@@ -10,11 +12,11 @@ public:
     Sphere(Vector v);
     Sphere(Vector v, double r);
 
-    bool Hit(Ray ray, double t_min, double t_max) const;
-    Vector Center() const { return Center_; }
+    [[nodiscard]] bool Hit(Ray ray, double t_min, double t_max) const;
+    [[nodiscard]] Vector Center() const { return Center_; }
     void Center(Vector o) { Center_ = o; }
-    double Radius() const { return Radius_; }
-    void Radius()(double r) { Radius_ = r; }
+    [[nodiscard]] double Radius() const { return Radius_; }
+    void Radius(double r) { Radius_ = r; }
 
     friend std::ostream& operator<<(std::ostream& os, const Sphere& sph);
     private:
@@ -23,4 +25,4 @@ public:
 };
 
 
-#endif //VECTOR_SPHARE_H
+#endif //VECTOR_SPERE_H

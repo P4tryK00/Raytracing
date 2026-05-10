@@ -1,7 +1,8 @@
 #include <iostream>
 #include <numbers>
-
 #include "Vector.h"
+#include "Ray.h"
+#include "Sphere.h"
 
 int main() {
     Vector vec1(0,3,0);
@@ -32,8 +33,13 @@ int main() {
     std::cout<<"4: "<<crossProd56.x<<" "<<crossProd56.y<<" "<<crossProd56.z<<std::endl;
 
     //Task 5
-    auto normalizedCrossProd56 = crossProd56;
+    auto normalizedCrossProd56 = crossProd56.normalized();
     std::cout<<"5: "<<normalizedCrossProd56.x<<normalizedCrossProd56.y<<normalizedCrossProd56.z<<std::endl;
+
+    //Task 7
+    Vector center(0,0,0);
+    Sphere s1(center,10);
+    Vector origin(0,0,-20);
 
 
 

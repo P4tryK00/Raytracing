@@ -1,6 +1,7 @@
 #ifndef VECTOR_VECTOR_H
 #define VECTOR_VECTOR_H
 
+#include <iosfwd>
 
 
 class Vector {
@@ -12,19 +13,31 @@ class Vector {
 
     void operator+=(const Vector& v);
     void operator-=(const Vector& v);
+    Vector operator+(const Vector& v) const;
+    Vector operator-(const Vector& v) const;
+    Vector operator*(double m) const;
+    Vector operator/(double d) const;
+
+
 
     void divide(double d);
     void scalarMultiply(double m);
-
-    double length() const;
     void normalize();
 
+    [[nodiscard]] double length() const;
+    [[nodiscard]] Vector normalized() const;
 
-    double dotProduct(const Vector& v) const;
 
-    Vector crossProduct(const Vector& v) const;
-
+    [[nodiscard]] double dotProduct(const Vector& v) const;
+    [[nodiscard]] Vector crossProduct(const Vector& v) const;
 };
+
+//wynik ten sam wektor * m ale zapis m * wektor, po to to
+inline Vector operator*(double m, const Vector& v) {
+    return v * m;
+}
+
+std::ostream& operator<<(std::ostream& os, const Vector& v);
 
 
 
