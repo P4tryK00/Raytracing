@@ -11,4 +11,6 @@ add_executable(Raytracing main.cpp
         Sphere.cpp
         Sphere.h
         Plane.cpp
-        Plane.h)
+        Plane.h
+        Triangle.cpp
+        Triangle.h)

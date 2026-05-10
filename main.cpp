@@ -6,6 +6,9 @@
 #include "Ray.h"
 #include "Sphere.h"
 #include  "Plane.h"
+#include "Triangle.h"
+
+
 
 int main() {
     Vector vec1(0,3,0);
@@ -25,7 +28,7 @@ int main() {
 
     // Task 3
     auto alpha = acos(  vec1.dotProduct( vec2 ) / ( vec1.length() * vec2.length() ) );
-    std::cout<<"3: "<<alpha * (180/std::numbers::pi)<<" deegres"<<std::endl;
+    std::cout<<"3: "<<alpha * (180/std::numbers::pi)<<" degrees"<<std::endl;
 
 
     // Task 4
@@ -89,12 +92,52 @@ int main() {
     }else {
         std::cout<<"MISS"<<std::endl;
     }
+    
+    //task15
+    Vector A(0,0,0);
+    Vector B(1,0,0);
+    Vector C(0,1,0);
+    Triangle t(A,B,C);
+    
+    Vector P1(-1,0.5,0);
+    Vector P2(1,0.5,0);
+    
+    Ray r12(P1,P2-P1);
+    
+    IntersectionResult restriangle = t.intersect(r12, r12.distance());
+    
+    if (restriangle.type == HIT || restriangle.type == INSIDE_PRIMITIVE ) {
+        std::cout<<"15.1:Triangle HIT: "<<restriangle.LPOINT<<std::endl;
+    }else{
+        std::cout<<"15.1: MISS"<<std::endl;
+    }
 
-
-
-
-
-
+    
+    Vector P3(2,-1,0);
+    Vector P4(2,2,0);
+    
+    Ray r34(P3,P4-P3);
+    
+    IntersectionResult restriangle2 = t.intersect(r34, r34.distance());
+    
+    if (restriangle2.type == HIT || restriangle2.type == INSIDE_PRIMITIVE ) {
+        std::cout<<"15.2:Triangle HIT: "<<restriangle2.LPOINT<<std::endl;
+    }else{
+        std::cout<<"15.2: MISS"<<std::endl;
+    } 
+    
+    Vector P5(0,0,-1);
+    Vector P6(0,0,1);
+    
+    Ray r56(P5,P6-P5);
+    
+    IntersectionResult restriangle3 = t.intersect(r56, r56.distance());
+    
+    if (restriangle3.type == HIT || restriangle3.type == INSIDE_PRIMITIVE ) {
+        std::cout<<"15.3:Triangle HIT: "<<restriangle3.LPOINT<<std::endl;
+    }else{
+        std::cout<<"15.3: MISS"<<std::endl;
+    } 
 
 
 

@@ -27,13 +27,13 @@ IntersectionResult Plane::Intersects(const Ray& ray, double range) const {
     result.type = MISS;
 
     auto nDotD = normal.dotProduct(ray.direction());
-
-    if ( nDotD == 0.0 ) return result;
+    constexpr auto epsilon = 1e-8;
+    if ( std::abs(nDotD) < epsilon ) return result;
 
     auto t = ( -distance - normal.dotProduct(ray.origin())) / nDotD;
 
-    if ( t > 0.0 ) {
-        if ( range == 0.0  || t < range) {
+    if ( t > -epsilon ) {
+        if ( range < epsilon  || t < range) {
             if ( normal.dotProduct(ray.direction()) < 0.0) {
                 result.type = HIT;
             }else {

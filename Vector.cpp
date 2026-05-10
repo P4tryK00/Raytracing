@@ -72,8 +72,9 @@ double Vector::length() const {
 }
 
 Vector Vector::normalized() const {
+    constexpr auto epsilon = 1e-8;
     auto length = this->length();
-    if (length != 0.0) {
+    if (length > epsilon) {
         Vector result = *this;
         result.divide(length);
         return result;
@@ -83,8 +84,9 @@ Vector Vector::normalized() const {
 }
 
 void Vector::normalize() {
+    constexpr auto epsilon = 1e-8;
     auto length = this->length();
-    if (length != 0.0) {
+    if (length > epsilon) {
         this->divide(length);
     }else {
         throw std::invalid_argument("Dividing by zero");
