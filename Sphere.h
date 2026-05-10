@@ -12,7 +12,7 @@ public:
     Sphere(Vector v);
     Sphere(Vector v, double r);
 
-    [[nodiscard]] bool Hit(Ray ray, double t_min, double t_max) const;
+    [[nodiscard]] IntersectionResult Hit(Ray ray, double t_min, double t_max) const;
     [[nodiscard]] Vector Center() const { return Center_; }
     void Center(Vector o) { Center_ = o; }
     [[nodiscard]] double Radius() const { return Radius_; }
