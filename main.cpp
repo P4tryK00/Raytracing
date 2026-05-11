@@ -137,7 +137,17 @@ int main() {
         std::cout<<"15.3:Triangle HIT: "<<restriangle3.LPOINT<<std::endl;
     }else{
         std::cout<<"15.3: MISS"<<std::endl;
-    } 
+    }
+
+    // norbert test
+    Vector Pn1(0.25,0.5,1.0);
+    Vector Pn2(0.25,0.5,-1.0);
+
+    Ray rn(Pn1,Pn2-Pn1);
+    IntersectionResult resnor = t.intersect(rn, rn.distance());
+    if (resnor.type  == HIT  ||  resnor.type == INSIDE_PRIMITIVE ) {
+        std::cout<<"HIT"<<std::endl;
+    }
 
 
 

@@ -76,7 +76,7 @@ IntersectionResult Triangle::intersect(const Ray& ray, double range) const {
     Vector q = s.crossProduct(edge1);
     auto v = f * ray.direction().dotProduct(q);
     
-    if ( v <= EPSILON || v + u >- 1.0 - EPSILON ) {
+    if ( v <= EPSILON || v + u >= 1.0 - EPSILON ) {
         return result;
     }
     
