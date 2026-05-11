@@ -62,7 +62,7 @@ IntersectionResult Triangle::intersect(const Ray& ray, double range) const {
             }
             return result; 
         }
-    }
+    }// zmniejszylem minimalnie trojakt
     
     
     auto f = 1.0 / a;
