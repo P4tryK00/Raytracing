@@ -69,14 +69,14 @@ IntersectionResult Triangle::intersect(const Ray& ray, double range) const {
     Vector s = ray.origin() - v0_;
     auto u = f * s.dotProduct(h);
     
-    if (u < -EPSILON || u > 1.0 + EPSILON) {
+    if (u <= EPSILON || u >= 1.0 - EPSILON) {
         return result;
     }
     
     Vector q = s.crossProduct(edge1);
     auto v = f * ray.direction().dotProduct(q);
     
-    if ( v < -EPSILON || v + u > 1.0 + EPSILON ) {
+    if ( v <= EPSILON || v + u >- 1.0 - EPSILON ) {
         return result;
     }
     
