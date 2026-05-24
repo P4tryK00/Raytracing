@@ -55,13 +55,13 @@ int main() {
 
     IntersectionResult res1 = s1.Hit(r1, 0.001, INFINITY);
     IntersectionResult res2 = s1.Hit(r2, 0.001, INFINITY);
-    if (res1.type == HIT  ) {
+    if (res1.type == HIT || res1.type == INSIDE_PRIMITIVE  ) {
         std::cout<<"res1 LPOINT: "<< res1.LPOINT<<std::endl;
     }else {
         std::cout<<"MISS"<<std::endl;
     }
 
-    if ( res2.type == HIT  ) {
+    if ( res2.type == HIT || res2.type == INSIDE_PRIMITIVE  ) {
         std::cout<<"res 2LPOINT: "<< res2.LPOINT<<std::endl;
     }else {
         std::cout<<"MISS"<<std::endl;
@@ -74,10 +74,10 @@ int main() {
 
     IntersectionResult res3 = s1.Hit(r3, 0.001, INFINITY);
 
-    if (res3.type == HIT  ) {
-        std::cout<<"res 3LPOINT: "<< res3.LPOINT<<std::endl;
+    if (res3.type == HIT  || res3.type == INSIDE_PRIMITIVE) {
+        std::cout<<"12. res 3LPOINT: "<< res3.LPOINT<<std::endl;
     }else {
-        std::cout<<"MISS"<<std::endl;
+        std::cout<<"12. MISS"<<std::endl;
     }
 
     Vector planeNormal(0, 1, 1);
@@ -139,9 +139,9 @@ int main() {
         std::cout<<"15.3: MISS"<<std::endl;
     }
 
-    // norbert test
-    Vector Pn1(0.25,0.5,1.0);
-    Vector Pn2(0.25,0.5,-1.0);
+    //  test
+    Vector Pn1(0.5,0,1.0);
+    Vector Pn2(0.5,0,-1.0);
 
     Ray rn(Pn1,Pn2-Pn1);
     IntersectionResult resnor = t.intersect(rn, rn.distance());

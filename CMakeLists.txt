@@ -3,14 +3,17 @@ project(Raytracing)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(Raytracing main.cpp
-        Vector.cpp
-        Vector.h
-        Ray.cpp
-        Ray.h
-        Sphere.cpp
-        Sphere.h
-        Plane.cpp
-        Plane.h
-        Triangle.cpp
-        Triangle.h)
+
+add_executable(Raytracing
+        main.cpp
+        src/Camera.cpp
+        src/Color.cpp
+        src/Image.cpp
+        src/Plane.cpp
+        src/Ray.cpp
+        src/Sphere.cpp
+        src/Triangle.cpp
+        src/Vector.cpp
+)
+
+target_include_directories(Raytracing PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/headers)
