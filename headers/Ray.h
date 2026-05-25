@@ -5,19 +5,6 @@
 
 #include "Vector.h"
 
-enum IntersectionType {
-    MISS,
-    HIT,
-    INSIDE_PRIMITIVE
-};
-
-struct IntersectionResult {
-    IntersectionType type;
-    Vector LPOINT;
-    double distance;
-    Vector intersectionLPOINTNormal;
-};
-
 class Ray {
 public:
     Ray();

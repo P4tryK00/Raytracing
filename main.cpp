@@ -1,156 +1,123 @@
 #include <iostream>
-#include <numbers>
+#include <string>
+#include <vector>
+#include <memory>
 
-#include "Plane.h"
 #include "Vector.h"
-#include "Ray.h"
 #include "Sphere.h"
-#include  "Plane.h"
-#include "Triangle.h"
-
-
+#include "Plane.h"
+#include "Color.h"
+#include "Image.h"
+#include "Camera.h"
+#include "Scene.h"
+#include "Sampler.h"
+#include "Renderer.h"
+#include "PointLight.h"
 
 int main() {
-    Vector vec1(0,3,0);
-    Vector vec2(5,5,0);
-    Vector vec3;
-    Vector vec4;
-
-    vec3+=vec1;
-    vec4+=vec2;
-
-    std::cout<<vec3.x;
-    std::cout<<" "<<vec3.y;
-    std::cout<<" "<<vec3.z<<std::endl;
-    std::cout<<vec4.x;
-    std::cout<<" "<<vec4.y;
-    std::cout<<" "<<vec4.z<<std::endl;
-
-    // Task 3
-    auto alpha = acos(  vec1.dotProduct( vec2 ) / ( vec1.length() * vec2.length() ) );
-    std::cout<<"3: "<<alpha * (180/std::numbers::pi)<<" degrees"<<std::endl;
-
-
-    // Task 4
-    Vector vec5(4,5,1);
-    Vector vec6(4,1,3);
-
-    auto crossProd56 = vec5.crossProduct(vec6);
-    std::cout<<"4: "<<crossProd56.x<<" "<<crossProd56.y<<" "<<crossProd56.z<<std::endl;
-
-    //Task 5
-    auto normalizedCrossProd56 = crossProd56.normalized();
-    std::cout<<"5: "<<normalizedCrossProd56.x <<" "
-    <<normalizedCrossProd56.y << " "
-    <<normalizedCrossProd56.z<<std::endl;
-
-    //Task 7
-    Vector center(0,0,0);
-    Sphere s1(center,10);
-    Vector origin(0,0,-20);
-    Vector dir(0,0,1);
-    Ray r1(origin,dir);
-    Vector dir2(0,20,0);
-    Ray r2(origin, dir2);
-
-    IntersectionResult res1 = s1.Hit(r1, 0.001, INFINITY);
-    IntersectionResult res2 = s1.Hit(r2, 0.001, INFINITY);
-    if (res1.type == HIT || res1.type == INSIDE_PRIMITIVE  ) {
-        std::cout<<"res1 LPOINT: "<< res1.LPOINT<<std::endl;
-    }else {
-        std::cout<<"MISS"<<std::endl;
-    }
-
-    if ( res2.type == HIT || res2.type == INSIDE_PRIMITIVE  ) {
-        std::cout<<"res 2LPOINT: "<< res2.LPOINT<<std::endl;
-    }else {
-        std::cout<<"MISS"<<std::endl;
-    }
-
-    //task 12
-    Vector originR3(10, -20, 0);
-    Vector dirR3(0,1,0);
-    Ray r3(originR3,dirR3);
-
-    IntersectionResult res3 = s1.Hit(r3, 0.001, INFINITY);
-
-    if (res3.type == HIT  || res3.type == INSIDE_PRIMITIVE) {
-        std::cout<<"12. res 3LPOINT: "<< res3.LPOINT<<std::endl;
-    }else {
-        std::cout<<"12. MISS"<<std::endl;
-    }
-
-    Vector planeNormal(0, 1, 1);
-    Plane p(planeNormal, 0.0);
-
-    std::cout << "13 : " << p << std::endl;
-
-    //task 14
-    IntersectionResult resPlane = p.Intersects(r2, 0.0);
-    if (resPlane.type == HIT || resPlane.type == INSIDE_PRIMITIVE ) {
-        std::cout<<"r2 plane LPOINT:"<<resPlane.LPOINT<<std::endl;
-    }else {
-        std::cout<<"MISS"<<std::endl;
-    }
+    int width = 800;
+    int height = 600;
     
-    //task15
-    Vector A(0,0,0);
-    Vector B(1,0,0);
-    Vector C(0,1,0);
-    Triangle t(A,B,C);
+    // Ciemne tło, aby światło ładnie kontrastowało
+    Scene scene(Color(0.1, 0.1, 0.1)); 
     
-    Vector P1(-1,0.5,0);
-    Vector P2(1,0.5,0);
+    // --- 1. DEFINICJA MATERIAŁÓW (Phong: Kolor, Ka, Kd, Ks, Shininess) ---
+    // Błyszcząca niebieska kula (wysokie odbicie lustrzane Ks i wysoki połysk n)
+    Material bluePlastic(Color(0.0, 0.0, 1.0), 0.2, 0.7, 0.8, 50.0);
     
-    Ray r12(P1,P2-P1);
+    // Matowa czerwona kula (bardzo niskie Ks, niskie n)
+    Material redMatte(Color(1.0, 0.2, 0.2), 0.2, 0.9, 0.1, 5.0);
     
-    IntersectionResult restriangle = t.intersect(r12, r12.distance());
-    
-    if (restriangle.type == HIT || restriangle.type == INSIDE_PRIMITIVE ) {
-        std::cout<<"15.1:Triangle HIT: "<<restriangle.LPOINT<<std::endl;
-    }else{
-        std::cout<<"15.1: MISS"<<std::endl;
-    }
+    // Zielona podłoga, na której zobaczymy cienie rzucane przez kule
+    Material greenFloor(Color(0.1, 0.8, 0.1), 0.2, 0.8, 0.2, 10.0);
 
-    
-    Vector P3(2,-1,0);
-    Vector P4(2,2,0);
-    
-    Ray r34(P3,P4-P3);
-    
-    IntersectionResult restriangle2 = t.intersect(r34, r34.distance());
-    
-    if (restriangle2.type == HIT || restriangle2.type == INSIDE_PRIMITIVE ) {
-        std::cout<<"15.2:Triangle HIT: "<<restriangle2.LPOINT<<std::endl;
-    }else{
-        std::cout<<"15.2: MISS"<<std::endl;
-    } 
-    
-    Vector P5(0,0,-1);
-    Vector P6(0,0,1);
-    
-    Ray r56(P5,P6-P5);
-    
-    IntersectionResult restriangle3 = t.intersect(r56, r56.distance());
-    
-    if (restriangle3.type == HIT || restriangle3.type == INSIDE_PRIMITIVE ) {
-        std::cout<<"15.3:Triangle HIT: "<<restriangle3.LPOINT<<std::endl;
-    }else{
-        std::cout<<"15.3: MISS"<<std::endl;
-    }
+    // --- 2. BUDOWA SCENY ---
+    scene.addSphere(Sphere(Vector(-0.6, 0.0, -4.0), 1.2, bluePlastic));
+    scene.addSphere(Sphere(Vector(1.2, 0.0, -6.0), 1.0, redMatte));
+    scene.addPlane(Plane(Vector(0.0, 1.0, 0.0), 1.2, greenFloor));
+    // --- 3. DODANIE ŚWIATŁA ---
+    // Białe światło punktowe umieszczone w górze, po prawej stronie, nieco przed kulami
+    std::shared_ptr<Light> mainLight = std::make_shared<PointLight>(
+        Vector(3.0, 5.0, 1.0), 
+        Color(1.0, 1.0, 1.0)
+    );
+    scene.addLight(mainLight);
 
-    //  test
-    Vector Pn1(0.5,0,1.0);
-    Vector Pn2(0.5,0,-1.0);
+    // --- 4. KONFIGURACJA KAMER ---
+    Vector eye(0.0, 0.0, 0.0); 
+    Vector target(0.0, 0.0, -5.0);
+    Vector up(0.0, 1.0, 0.0);
+    
+    Camera camPersp(CameraType::PERSPECTIVE, eye, target, up, 60.0, 5.0);
+    Camera camOrtho(CameraType::ORTHOGRAPHIC, eye, target, up, 60.0, 5.0);
+    
+    Renderer renderer;
+    std::cout << "Start" << std::endl;
+    
+    // --- Render 1 ---
+    std::cout << "\n[1/8] perspective_1spp.ppm" << std::endl;
+    Image img1(width, height);
+    std::vector<Sample2D> samples1 = Sampler::makeCenterSample();
+    renderer.render(scene, camPersp, img1, samples1);
+    img1.savePPM("perspective_1spp.ppm");
+    std::cout << "Saved!" << std::endl;
+    
+    // --- Render 2 ---
+    std::cout << "\n[2/8] orthographic_1spp.ppm" << std::endl;
+    Image img2(width, height);
+    std::vector<Sample2D> samples2 = Sampler::makeCenterSample();
+    renderer.render(scene, camOrtho, img2, samples2);
+    img2.savePPM("orthographic_1spp.ppm");
+    std::cout << "Saved!" << std::endl;
 
-    Ray rn(Pn1,Pn2-Pn1);
-    IntersectionResult resnor = t.intersect(rn, rn.distance());
-    if (resnor.type  == HIT  ||  resnor.type == INSIDE_PRIMITIVE ) {
-        std::cout<<"HIT"<<std::endl;
-    }
+    // --- Render 3 ---
+    std::cout << "\n[3/8] perspective_jittered_4x4_aa.ppm" << std::endl;
+    Image img3(width, height);
+    std::vector<Sample2D> samples3 = Sampler::makeJitteredSamples(4); 
+    renderer.render(scene, camPersp, img3, samples3);
+    img3.savePPM("perspective_jittered_4x4_aa.ppm"); 
+    std::cout << "Saved" << std::endl;
+    
+    // --- Render 4 ---
+    std::cout << "\n[4/8] perspective_jittered_1x1_aa.ppm" << std::endl;
+    Image img4(width, height);
+    std::vector<Sample2D> samples4 = Sampler::makeJitteredSamples(1);
+    renderer.render(scene, camPersp, img4, samples4);
+    img4.savePPM("perspective_jittered_1x1_aa.ppm"); 
+    std::cout << "Saved" << std::endl;
 
+    // --- Render 5 ---
+    std::cout << "\n[5/8] perspective_jittered_2x2_aa.ppm" << std::endl;
+    Image img5(width, height);
+    std::vector<Sample2D> samples5 = Sampler::makeJitteredSamples(2);
+    renderer.render(scene, camPersp, img5, samples5);
+    img5.savePPM("perspective_jittered_2x2_aa.ppm"); 
+    std::cout << "Saved" << std::endl;
+    
+    // --- Render 6 ---
+    std::cout << "\n[6/8] perspective_regular_4x4_aa.ppm" << std::endl;
+    Image img6(width, height);
+    std::vector<Sample2D> samples6 = Sampler::makeRegularSample(4); 
+    renderer.render(scene, camPersp, img6, samples6);
+    img6.savePPM("perspective_regular_4x4_aa.ppm"); 
+    std::cout << "Saved" << std::endl;
+    
+    // --- Render 7 ---
+    std::cout << "\n[7/8] perspective_regular_1x1_aa.ppm" << std::endl;
+    Image img7(width, height);
+    std::vector<Sample2D> samples7 = Sampler::makeRegularSample(1);
+    renderer.render(scene, camPersp, img7, samples7);
+    img7.savePPM("perspective_regular_1x1_aa.ppm"); 
+    std::cout << "Saved" << std::endl;
 
-
+    // --- Render 8 ---
+    std::cout << "\n[8/8] perspective_regular_2x2_aa.ppm" << std::endl;
+    Image img8(width, height);
+    std::vector<Sample2D> samples8 = Sampler::makeRegularSample(2);
+    renderer.render(scene, camPersp, img8, samples8);
+    img8.savePPM("perspective_regular_2x2_aa.ppm"); 
+    std::cout << "Saved!" << std::endl;
+    
 
     return 0;
 }

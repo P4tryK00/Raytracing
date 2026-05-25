@@ -2,13 +2,13 @@
 
 #include <cmath>
 
-Triangle::Triangle(Vector v0, Vector v1, Vector v2) : v0_(v0), v1_(v1), v2_(v2) {
+Triangle::Triangle(Vector v0, Vector v1, Vector v2, Material mat) : v0_(v0), v1_(v1), v2_(v2), material_(mat) {
     Vector edge1 = v1 - v0;
     Vector edge2 = v2 - v0;
     normal_ = edge1.crossProduct(edge2).normalized();
 }
 
-IntersectionResult Triangle::intersect(const Ray& ray, double range) const {
+IntersectionResult Triangle::intersect(const Ray& ray, double t_min, double t_max) const {
     IntersectionResult result;
     result.type = MISS;
     
@@ -42,11 +42,7 @@ IntersectionResult Triangle::intersect(const Ray& ray, double range) const {
     
     auto t = f * edge2.dotProduct(q);
     
-    if (t > 0.0) {
-        if (range > 0.0 && t > range) {
-            return result;
-        }
-        
+    if (t > t_min && t < t_max) {
         if ( normal_.dotProduct(ray.direction()) < -EPSILON) {
             result.type = HIT;
         }else {
@@ -56,6 +52,8 @@ IntersectionResult Triangle::intersect(const Ray& ray, double range) const {
         result.distance = t;
         result.LPOINT = ray.origin() + ray.direction() * t;
         result.intersectionLPOINTNormal = normal_;
+        
+        result.material = material_;
         
     }
     return result;
