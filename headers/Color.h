@@ -31,15 +31,13 @@ class Color {
     Color operator/(const double &s) const{
         return Color(r / s, g / s, b / s);
     }
-    Color operator+=(const Color &c) {
+    Color operator+=(const Color& c) {
         r += c.r;
         g += c.g;
         b += c.b;
         return *this;
     }
-    double r = 0.0;
-    double g = 0.0;
-    double b = 0.0;
+   
 
 
     static double clamp01(double x) {
@@ -53,6 +51,10 @@ class Color {
     static double gammaCorrect(double x) {
         return std::pow(clamp01(x), 1.0 / 2.2);
     }
+private:
+    double r = 0.0;
+    double g = 0.0;
+    double b = 0.0;
 
 };
 
