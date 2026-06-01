@@ -18,7 +18,7 @@ Color PointLight::getIntensityAt(const Vector& point) const {
     // Obliczanie współczynnika tłumienia (zanikania światła)
     double attenuation = constantAtten_ + (linearAtten_ * distance) + (quadAtten_ * distance * distance);
     
-    // Zabezpieczenie przed dzieleniem przez zero (choć dla domyślnego constant=1.0 się nie zdarzy)
+    // Zabezpieczenie przed dzieleniem przez zero
     if (attenuation <= 0.0) return intensity_;
     
     return intensity_ / attenuation;
