@@ -16,9 +16,8 @@ public:
 
 private:
     Color renderPixel(int x, int y, const Scene& scene, const Camera& camera, int imageWidth, int imageHeight, const std::vector<Sample2D>& samples) const;
-    Color trace(const Ray& ray, const Scene& scene) const;
-    
-    Color shade(const IntersectionResult& hit, const Scene& scene, const Ray& ray) const;
+    Color trace(const Ray& ray, const Scene& scene, int depth) const;
+    Color shade(const IntersectionResult& hit, const Scene& scene, const Ray& ray, int depth) const;
 
 };
 
