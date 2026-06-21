@@ -25,7 +25,7 @@ Ray Camera::generateRay(int x, int y, int imageWidth, int imageHeight, double sa
             auto py = ( 1.0 - 2.0 * v) * std::tan(fovRadians_ * 0.5);
             
             auto direction = (forward_ + right_ * px + trueUp_ * py).normalized();
-            return Ray(eye_, direction);
+            return {eye_, direction};
         }
         case CameraType::ORTHOGRAPHIC: {
             auto screenX = ( 2.0 * u - 1.0) * aspectRatio * viewScale_;
@@ -34,9 +34,9 @@ Ray Camera::generateRay(int x, int y, int imageWidth, int imageHeight, double sa
             auto origin = eye_ + right_ * screenX + trueUp_ * screenY;
             auto direction = forward_;
             
-            return Ray(origin, direction);
+            return {origin, direction};
         }
         default:
-            return Ray(eye_, forward_);
+            return {eye_, forward_};
     }
 }

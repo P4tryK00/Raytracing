@@ -31,10 +31,19 @@ Color Renderer::renderPixel(int x, int y, const Scene& scene, const Camera& came
         Ray ray = camera.generateRay(x, y, imageWidth, imageHeight, sample.x, sample.y);
         
         //depth = 5 ilosc odbic
-        sum += trace(ray, scene, 10); 
+        sum += trace(ray, scene, 5);
     }
+
+    Color finalColor = sum / static_cast<double>(samples.size());
+    // TONE MAPPING (Symulacja ekspozycji matrycy aparatu)
+    double exposure = 1.0;
+
+    double r = 1.0 - std::exp(-finalColor.red() * exposure);
+    double g = 1.0 - std::exp(-finalColor.green() * exposure);
+    double b = 1.0 - std::exp(-finalColor.blue() * exposure);
+
+    return Color(r, g, b); // Zwracamy zmapowany kolor, a Image.cpp nałoży na to Twoją Gammę!
     
-    return sum / static_cast<double>(samples.size());
 }
 
 Color Renderer::trace(const Ray& ray, const Scene& scene, int depth) const {
@@ -61,7 +70,7 @@ Color Renderer::shade(const IntersectionResult& hit, const Scene& scene, const R
     
     Vector N = hit.intersectionLPOINTNormal.normalized();
     Vector V = (ray.origin() - hit.LPOINT).normalized(); 
-    
+
     // --- MODEL PHONGA I CIENIE ---
     for (const auto& light : scene.getLights()) {
         
@@ -80,7 +89,7 @@ Color Renderer::shade(const IntersectionResult& hit, const Scene& scene, const R
         // --- 3. DIFFUSE ---
         double nDotL = std::max(0.0, N.dotProduct(L));
         Color diffuse = mat.baseColor * lightIntensity * (mat.Kd * nDotL);
-        baseColor += diffuse; // Zapisujemy tylko do bazy!
+        baseColor += diffuse;
         
         // --- 4. SPECULAR ---
         if (nDotL > 0.0) { 
@@ -88,7 +97,7 @@ Color Renderer::shade(const IntersectionResult& hit, const Scene& scene, const R
             double rDotV = std::max(0.0, R.dotProduct(V));
             double specularFactor = std::pow(rDotV, mat.n);
             
-            // Zapisujemy bezpośrednio do oddzielnego koszyka na rozbłyski!
+            // Zapisujemy bezpośrednio do oddzielnego koszyka na rozbłyski
             specularColor += lightIntensity * (mat.Ks * specularFactor);     
         }
     }
@@ -141,7 +150,7 @@ Color Renderer::shade(const IntersectionResult& hit, const Scene& scene, const R
     if (localWeight < 0.0) localWeight = 0.0;
     
     // baseColor mnożymy przez wagę (więc szkło nie ma własnego koloru),
-    // ale specularColor DODAJEMY bezwarunkowo, żeby szkło miało ostry błysk z żarówki
+    // ale specularColor ddodajemy, żeby szkło miało ostry błysk z żarówki
     finalColor = (baseColor * localWeight) + 
                  specularColor + 
                  (reflectedColor * mat.reflectivity) + 

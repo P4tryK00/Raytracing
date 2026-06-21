@@ -18,6 +18,7 @@ add_executable(Raytracing
         src/Renderer.cpp
         src/Light.cpp
         src/PointLight.cpp
+        src/SpotLight.cpp
 )
 
 target_include_directories(Raytracing PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/headers)
