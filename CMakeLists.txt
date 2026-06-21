@@ -1,24 +1,23 @@
-cmake_minimum_required(VERSION 4.2)
+cmake_minimum_required(VERSION 3.20)
 project(Raytracing)
 
 set(CMAKE_CXX_STANDARD 20)
 
+# Informujemy kompilator, gdzie leżą pliki nagłówkowe poszczególnych modułów
+include_directories(math geometry lights core engine)
 
 add_executable(Raytracing
         main.cpp
-        src/Camera.cpp
-        src/Image.cpp
-        src/Plane.cpp
-        src/Ray.cpp
-        src/Sphere.cpp
-        src/Triangle.cpp
-        src/Vector.cpp
-        src/Scene.cpp
-        src/Sampler.cpp
-        src/Renderer.cpp
-        src/Light.cpp
-        src/PointLight.cpp
-        src/SpotLight.cpp
+        math/Vector.cpp
+        geometry/Sphere.cpp
+        geometry/Plane.cpp
+        geometry/Triangle.cpp
+        lights/PointLight.cpp
+        lights/SpotLight.cpp
+        core/Image.cpp
+        core/Ray.cpp
+        core/Sampler.cpp
+        engine/Camera.cpp
+        engine/Scene.cpp
+        engine/Renderer.cpp
 )
-
-target_include_directories(Raytracing PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/headers)
