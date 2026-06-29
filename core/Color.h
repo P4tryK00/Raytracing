@@ -4,8 +4,6 @@
 #include <algorithm>
 #include <cmath>
 
-// Klasa reprezentująca kolor RGB oparty na wartościach zmiennoprzecinkowych.
-// Służy do obliczeń fizycznych (akumulacja światła, materiały) w przestrzeni liniowej.
 class Color {
     public:
     Color() = default;

@@ -15,17 +15,15 @@
 #include "PointLight.h"
 #include "SpotLight.h"
 
-// =========================================================
-// FUNKCJA POMOCNICZA: Buduje pokój i renderuje podane światło
-// =========================================================
+
 void renderSetup(const std::string& filename, std::shared_ptr<Light> light, int width, int height) {
     Scene scene(Color(0.0, 0.0, 0.0));
 
     // --- 1. MATERIAŁY ---
-    Material matWhite(Color(0.8, 0.8, 0.8), 0.2, 0.8, 0.0, 1.0, 0.0, 0.0, 1.0);
-    Material matRed  (Color(0.8, 0.1, 0.1), 0.2, 0.8, 0.0, 1.0, 0.0, 0.0, 1.0);
-    Material matBlue (Color(0.1, 0.1, 0.8), 0.2, 0.8, 0.0, 1.0, 0.0, 0.0, 1.0);
-    Material matBlack(Color(0.1, 0.1, 0.1), 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0);
+    Material matWhite(Color(0.8, 0.8, 0.8), 0.02, 0.8, 0.0, 1.0, 0.0, 0.0, 1.0);
+    Material matRed  (Color(0.8, 0.1, 0.1), 0.02, 0.8, 0.0, 1.0, 0.0, 0.0, 1.0);
+    Material matBlue (Color(0.1, 0.1, 0.8), 0.02, 0.8, 0.0, 1.0, 0.0, 0.0, 1.0);
+    Material matBlack(Color(0.1, 0.1, 0.1), 0.02, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0);
     Material matMirror(Color(0.0, 0.0, 0.0), 0.0, 0.0, 1.0, 100.0, 1.0, 0.0, 1.0);
     Material matGlass (Color(0.0, 0.0, 0.0), 0.0, 0.0, 0.9, 100.0, 0.0, 1.0, 1.5);
 
@@ -68,9 +66,7 @@ void renderSetup(const std::string& filename, std::shared_ptr<Light> light, int 
     std::cout << "Saved file: " << filename << "\n" << std::endl;
 }
 
-// =========================================================
-// GŁÓWNA PĘTLA PROGRAMU (BATCH RENDER)
-// =========================================================
+
 int main() {
     int width = 800;
     int height = 600;
@@ -78,25 +74,25 @@ int main() {
     std::cout << "Start\n" << std::endl;
 
     // --- SCENA 1: Miękkie przejście ---
-    auto lightTeatr = std::make_shared<SpotLight>(
-        Vector(2.0, 2.9, 3.5), Vector(0.0, -1.0, 0.5), Color(1.0, 1.0, 1.0),
-        10.0, 35.0, 1.0, 0.04, 0.01
+    auto lightSoft = std::make_shared<SpotLight>(
+        Vector(2.0, 2.9, 3.5), Vector(0.0, -1.0, 0.5), Color(5.0, 5.0, 5.0),
+        10.0, 35.0, 1.0, 0.5, 0.1
     );
-    renderSetup("cornell_teatr.ppm", lightTeatr, width, height);
+    renderSetup("cornell_soft.ppm", lightSoft, width, height);
 
     // --- SCENA 2: Twarde odcięcie ---
-    auto lightLatarka = std::make_shared<SpotLight>(
-        Vector(2.0, 2.9, 3.5), Vector(0.0, -1.0, 0.5), Color(1.0, 1.0, 1.0),
-        15.0, 16.0, 1.0, 0.04, 0.01
+    auto lightHard = std::make_shared<SpotLight>(
+        Vector(2.0, 2.9, 3.5), Vector(0.0, -1.0, 0.5), Color(5.0, 5.0, 5.0),
+        10.0, 16.0, 1.0, 0.5, 0.1
     );
-    renderSetup("cornell_latarka.ppm", lightLatarka, width, height);
+    renderSetup("cornell_hard.ppm", lightHard, width, height);
 
     // --- SCENA 3: BAZA  ---
-    auto lightPunktowe = std::make_shared<PointLight>(
+    auto lightPoint = std::make_shared<PointLight>(
         Vector(2.0, 2.9, 3.5), Color(1.0, 1.0, 1.0),
-        1.0, 0.04, 0.01
+        1.0, 0.5, 0.1
     );
-    renderSetup("cornell_punktowe.ppm", lightPunktowe, width, height);
+    renderSetup("cornell_point.ppm", lightPoint, width, height);
 
     std::cout << "Stop" << std::endl;
     return 0;

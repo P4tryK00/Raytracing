@@ -3,24 +3,20 @@
 #include <cmath>
 #include <stdexcept>
 
-// --- KONSTRUKTORY ---
 
-// Domyślny wektor zerowy. Często reprezentuje początek globalnego układu współrzędnych (Origin).
+// Domyślny wektor zerowy. 
 Vector::Vector() : x(0.0), y(0.0), z(0.0) {}
 
 // Konstruktor punktu/wektora w przestrzeni trójwymiarowej.
 Vector::Vector(double x, double y, double z) : x(x), y(y), z(z) {}
 
 // Konstruktor wektora kierunkowego (od punktu v1 do punktu v2).
-// Bardzo przydatny przy wyznaczaniu wektora promienia (Ray) strzelającego z kamery
-// w kierunku wirtualnej matrycy obrazu, lub przy szukaniu wektora do światła (Light Vector).
 Vector::Vector(const Vector &v1, const Vector &v2) {
     x = v2.x - v1.x;
     y = v2.y - v1.y;
     z = v2.z - v1.z;
 }
 
-// --- OPERATORY ARYTMETYCZNE ---
 
 void Vector::operator+= ( const Vector &v ) {
     x += v.x;
@@ -80,7 +76,7 @@ void Vector::scalarMultiply(double m) {
     z *= m;
 }
 
-// Zwraca długość euklidesową (moduł) wektora.
+// Zwraca długość wektora.
 // Używane do sprawdzania rzeczywistej odległości, np. limitu dystansu dla promieni cienia (t_max).
 double Vector::length() const {
     return std::sqrt( x*x + y*y + z*z );
@@ -117,21 +113,16 @@ void Vector::normalize() {
 // --- KLUCZOWE OPERACJE ALGEBRY LINIOWEJ ---
 
 // Iloczyn skalarny (Dot Product).
-// Najczęściej wywoływana funkcja w całym silniku. Jeśli znormalizowane wektory N i L wskażemy jako argumenty,
-// wynik da nam cosinus kąta między nimi. Służy do cieniowania Lamberta (obliczania kąta padania światła).
 double Vector::dotProduct(const Vector& v) const {
     return ( x * v.x ) + ( y * v.y ) + ( z * v.z );
 }
 
 // Iloczyn wektorowy (Cross Product).
 // Zwraca wektor idealnie prostopadły do dwóch wektorów wejściowych.
-// Używany do konstrukcji przestrzeni kamery (Orthonormal Basis: osie X, Y, Z)
-// oraz do wyznaczania wektorów normalnych powierzchni trójkątów.
 Vector Vector::crossProduct(const Vector& v) const {
     return { ( y * v.z ) - ( z * v.y ), ( z * v.x ) - ( x * v.z ), ( x * v.y ) - ( y * v.x ) };
 }
 
-// Przeciążenie strumienia dla ułatwienia wyrzucania logów do konsoli (diagnostyka geometrii).
 std::ostream& operator<<(std::ostream& os, const Vector& v) {
     os << v.x << " " << v.y << " " << v.z;
     return os;

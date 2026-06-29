@@ -2,7 +2,6 @@
 #include <iostream>
 #include <cmath>
 
-// Domyślny konstruktor definiujący płaszczyznę YZ (normalna wzdłuż osi X) przechodzącą przez środek układu.
 Plane::Plane() : normal_(1.0, 0.0, 0.0), distance_(0), material_() {}
 
 // Konstruktory oparte na równaniu płaszczyzny: N * P + d = 0

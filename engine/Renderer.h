@@ -10,14 +10,10 @@
 #include "IntersectionResult.h"
 #include <vector>
 
-// Główny silnik obliczeniowy (Core Engine).
-// Koordynuje współpracę między geometrią (Scene), optyką (Camera, Ray) oraz fizyką światła (Color, Material).
-// Implementuje klasyczny algorytm Whitted-style Ray Tracing z obsługą rekursywnych odbić i załamań.
+
 class Renderer {
 public:
-    // Główny punkt wejścia (Entry Point) potoku renderującego.
-    // Iteruje po wszystkich pikselach matrycy (z wykorzystaniem wielowątkowości w .cpp) i zapisuje
-    // wyliczone, zmapowane kolory bezpośrednio do bufora ramki (obiekt Image).
+    // Iteruje po wszystkich pikselach matrycy (z wykorzystaniem wielowątkowości w .cpp) 
     void render(const Scene& scene, const Camera& camera, Image& image, const std::vector<Sample2D>& samples) const;
 
 private:
@@ -32,7 +28,7 @@ private:
     // przed Stack Overflow w przypadku promienia uwięzionego między dwoma równoległymi lustrami).
     Color trace(const Ray& ray, const Scene& scene, int depth) const;
 
-    // Silnik cieniowania (Shading Engine).
+    
     // Oblicza rówanie renderowania dla konkretnego punktu uderzenia (IntersectionResult).
     // Łączy oświetlenie lokalne (cienie, matowe rozproszenie Lamberta, lustrzany rozbłysk Phonga)
     // z oświetleniem globalnym (generowanie nowych promieni odbitych i załamanych z użyciem Prawa Snella).
