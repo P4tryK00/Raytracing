@@ -76,14 +76,14 @@ int main() {
     // --- SCENA 1: Miękkie przejście ---
     auto lightSoft = std::make_shared<SpotLight>(
         Vector(2.0, 2.9, 3.5), Vector(0.0, -1.0, 0.5), Color(5.0, 5.0, 5.0),
-        10.0, 35.0, 1.0, 0.5, 0.1
+        10.0, 35.0, 1.0, 0.5, 0.1, 4.0
     );
     renderSetup("cornell_soft.ppm", lightSoft, width, height);
 
     // --- SCENA 2: Twarde odcięcie ---
     auto lightHard = std::make_shared<SpotLight>(
         Vector(2.0, 2.9, 3.5), Vector(0.0, -1.0, 0.5), Color(5.0, 5.0, 5.0),
-        10.0, 16.0, 1.0, 0.5, 0.1
+        10.0, 35.0, 1.0, 0.5, 0.1, 0.3
     );
     renderSetup("cornell_hard.ppm", lightHard, width, height);
 

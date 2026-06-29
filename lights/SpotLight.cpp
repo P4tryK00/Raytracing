@@ -5,8 +5,9 @@
 // Konstruktor. SpotLight  Emituje światło w określonym kierunku, ograniczone do bryły stożka. 
 SpotLight::SpotLight(const Vector &position, const Vector &direction, const Color &intensity,
                     double cutoffAngleDegrees, double outerCutoffAngleDegrees, double constantAtten, double linearAtten,
-                    double quadAtten) : position_(position), direction_(direction), intensity_(intensity),
-                                        constantAtten_(constantAtten), linearAtten_(linearAtten), quadAtten_(quadAtten) {
+                    double quadAtten, double falloffExponent_) 
+                    : position_(position), direction_(direction), intensity_(intensity), 
+                    constantAtten_(constantAtten), linearAtten_(linearAtten), quadAtten_(quadAtten), falloffExponent_(falloffExponent_) {
 
     // Zabezpieczenie 
     direction_ = direction.normalized();
@@ -52,13 +53,19 @@ Color SpotLight::getIntensityAt(const Vector &point) const {
     if (epsilon > 0.0) {
         // Normalizacja wartości 'theta' do przedziału [0.0, 1.0] w obrębie półcienia
         intensityScale = ( theta - outerCutoffAngleCos_) / epsilon;
+        
+        //zabezpieznie
+        intensityScale = std::clamp(intensityScale, 0.0, 1.0);
+        
+        //przejscie plynne dzieki parametrowi falloffexponent
+        intensityScale = std::pow(intensityScale, falloffExponent_);
 
         // Sztywne obcięcie, aby światło nie osiągało wartości ujemnych poza stożkiem
         // ani nie przekraczało 100% w samym centrum.
         if (intensityScale < 0.0) intensityScale = 0.0;
         if (intensityScale > 1.0) intensityScale = 1.0;
     } else {
-        // Twarda krawędź (Hard Edge): jeśli kąty wewnętrzny i zewnętrzny są równe (brak półcienia).
+        // eśli kąty wewnętrzny i zewnętrzny są równe 
         intensityScale = ( theta >= cutoffAngleCos_) ? 1.0 : 0.0;
     }
 

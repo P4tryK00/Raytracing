@@ -7,7 +7,7 @@
 class SpotLight : public Light {
 public:
     SpotLight(const Vector& position, const Vector& direction, const Color& intensity, double cutoffAngleDegrees,
-        double outerCutoffAngleDegrees, double constantAtten = 1.0, double linearAtten = 0.0, double quadAtten = 0.0);
+        double outerCutoffAngleDegrees, double constantAtten = 1.0, double linearAtten = 0.0, double quadAtten = 0.0, double falloffExponent_ = 1.0);
 
 
     // Zwraca znormalizowany wektor celujący od badanego punktu DO centrum reflektora.
@@ -32,6 +32,8 @@ private:
 
     // Bazowa moc/kolor emitowanego promieniowania.
     Color intensity_;
+    
+    double falloffExponent_; // parametr mocy zaniku 
 
 
     double cutoffAngleCos_;
