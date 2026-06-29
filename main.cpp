@@ -15,7 +15,6 @@
 #include "PointLight.h"
 #include "SpotLight.h"
 
-
 void renderSetup(const std::string& filename, std::shared_ptr<Light> light, int width, int height) {
     Scene scene(Color(0.0, 0.0, 0.0));
 
@@ -71,29 +70,47 @@ int main() {
     int width = 800;
     int height = 600;
 
-    std::cout << "Start\n" << std::endl;
+    std::cout <<"Start" << std::endl;
 
-    // --- SCENA 1: Miękkie przejście ---
+    // Wspólne parametry fizyczne, żeby łatwiej było nimi zarządzać
+    Vector lightPos(2.0, 2.9, 3.5);
+    Vector lightDir(0.0, -1.0, 0.5);
+    Color lightColor(5.0, 5.0, 5.0);
+   
+    
+    // Zanik liniowy (p = 1.0)
+    auto lightLinear = std::make_shared<SpotLight>(
+        lightPos, lightDir, lightColor, 10.0, 30.0, 1.0 
+    );
+    renderSetup("1_spot_falloff_linear.ppm", lightLinear, width, height);
+
+    // MIĘKKI ZANIK: (p = 4.0)
     auto lightSoft = std::make_shared<SpotLight>(
-        Vector(2.0, 2.9, 3.5), Vector(0.0, -1.0, 0.5), Color(5.0, 5.0, 5.0),
-        10.0, 35.0, 1.0, 0.5, 0.1, 4.0
+        lightPos, lightDir, lightColor, 10.0, 30.0, 4.0 
     );
-    renderSetup("cornell_soft.ppm", lightSoft, width, height);
+    renderSetup("2_spot_falloff_soft.ppm", lightSoft, width, height);
 
-    // --- SCENA 2: Twarde odcięcie ---
+    // TWARDY ZANIK: (p = 0.3)
     auto lightHard = std::make_shared<SpotLight>(
-        Vector(2.0, 2.9, 3.5), Vector(0.0, -1.0, 0.5), Color(5.0, 5.0, 5.0),
-        10.0, 35.0, 1.0, 0.5, 0.1, 0.3
+        lightPos, lightDir, lightColor, 10.0, 30.0, 0.3 
     );
-    renderSetup("cornell_hard.ppm", lightHard, width, height);
+    renderSetup("3_spot_falloff_hard.ppm", lightHard, width, height);
 
-    // --- SCENA 3: BAZA  ---
+ 
+    
+    //  WĄSKI STOŻEK
+    auto lightNarrow = std::make_shared<SpotLight>(
+        lightPos, lightDir, lightColor, 5.0, 15.0, 1.0 
+    );
+    renderSetup("4_spot_angle_narrow.ppm", lightNarrow, width, height);
+
+    
+    // point light 
     auto lightPoint = std::make_shared<PointLight>(
-        Vector(2.0, 2.9, 3.5), Color(1.0, 1.0, 1.0),
-        1.0, 0.5, 0.1
+        lightPos, lightColor, 1.0, 0.5, 0.04
     );
-    renderSetup("cornell_point.ppm", lightPoint, width, height);
+    renderSetup("5_point_light.ppm", lightPoint, width, height);
 
-    std::cout << "Stop" << std::endl;
+    std::cout << "stop" << std::endl;
     return 0;
 }

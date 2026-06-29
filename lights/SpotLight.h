@@ -7,7 +7,7 @@
 class SpotLight : public Light {
 public:
     SpotLight(const Vector& position, const Vector& direction, const Color& intensity, double cutoffAngleDegrees,
-        double outerCutoffAngleDegrees, double constantAtten = 1.0, double linearAtten = 0.0, double quadAtten = 0.0, double falloffExponent_ = 1.0);
+        double outerCutoffAngleDegrees, double falloffExponent_ = 1.0);
 
 
     // Zwraca znormalizowany wektor celujący od badanego punktu DO centrum reflektora.
@@ -39,10 +39,7 @@ private:
     double cutoffAngleCos_;
     double outerCutoffAngleCos_;
 
-    // Współczynniki tłumienia odległościowego 
-    double constantAtten_;
-    double linearAtten_;
-    double quadAtten_;
+ 
 
 };
 

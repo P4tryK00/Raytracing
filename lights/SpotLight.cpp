@@ -4,10 +4,8 @@
 
 // Konstruktor. SpotLight  Emituje światło w określonym kierunku, ograniczone do bryły stożka. 
 SpotLight::SpotLight(const Vector &position, const Vector &direction, const Color &intensity,
-                    double cutoffAngleDegrees, double outerCutoffAngleDegrees, double constantAtten, double linearAtten,
-                    double quadAtten, double falloffExponent_) 
-                    : position_(position), direction_(direction), intensity_(intensity), 
-                    constantAtten_(constantAtten), linearAtten_(linearAtten), quadAtten_(quadAtten), falloffExponent_(falloffExponent_) {
+                    double cutoffAngleDegrees, double outerCutoffAngleDegrees, double falloffExponent_) 
+                    : position_(position), direction_(direction), intensity_(intensity), falloffExponent_(falloffExponent_) {
 
     // Zabezpieczenie 
     direction_ = direction.normalized();
@@ -33,11 +31,8 @@ double SpotLight::getDistanceFrom(const Vector &point) const {
 Color SpotLight::getIntensityAt(const Vector &point) const {
     auto distance = getDistanceFrom(point);
 
-    // 1. Tłumienie odległościowe 
-    auto atteuntion = constantAtten_ + ( linearAtten_ * distance ) + ( quadAtten_ * distance * distance );
-    if (atteuntion <= 0.0) atteuntion = 1.0; 
-    Color baseIntensity = intensity_ / atteuntion;
-
+    auto baseIntensity = intensity_;
+    
     // 2. Wektor kierunkowy światła biegnącego z żarówki do punktu uderzenia
     Vector lightToPoint = (point - position_).normalized();
 
@@ -59,11 +54,8 @@ Color SpotLight::getIntensityAt(const Vector &point) const {
         
         //przejscie plynne dzieki parametrowi falloffexponent
         intensityScale = std::pow(intensityScale, falloffExponent_);
-
-        // Sztywne obcięcie, aby światło nie osiągało wartości ujemnych poza stożkiem
-        // ani nie przekraczało 100% w samym centrum.
-        if (intensityScale < 0.0) intensityScale = 0.0;
-        if (intensityScale > 1.0) intensityScale = 1.0;
+        
+       
     } else {
         // eśli kąty wewnętrzny i zewnętrzny są równe 
         intensityScale = ( theta >= cutoffAngleCos_) ? 1.0 : 0.0;
